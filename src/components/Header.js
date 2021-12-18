@@ -37,6 +37,9 @@ const Title = styled.header`
         color: #E8833A;
         cursor: pointer;
         text-decoration: none;
+        
+        &:hover {
+            color: red;
+        }
     }
-
 `;

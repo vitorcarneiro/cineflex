@@ -34,26 +34,23 @@ export default function MovieSelection() {
     }
 
     return (
-        <MovieContainer>
+        <Container>
             <TextMovieSelection>
                 Selecione o filme
             </TextMovieSelection>
 
             <GenerateMoviesList />
-        </MovieContainer>
+        </Container>
     );
 }
 
-const MovieContainer = styled.main`
+const Container = styled.main`
     position: absolute;
     top: 0;
     left: 0;
-
     width: 100vw;
     height: auto;
-
     padding-top: 10vh;
-
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -64,7 +61,6 @@ const Loading = styled.div`
 `;
 
 const TextMovieSelection = styled.h1`
-
     font-family: Roboto;
     font-style: normal;
     font-weight: normal;
@@ -74,18 +70,14 @@ const TextMovieSelection = styled.h1`
     align-items: center;
     text-align: center;
     letter-spacing: 0.04em;
-
     color: #293845;
 `;
 
 const MoviesList = styled.ul`
     width: auto;
-
     display: flex;
     flex-wrap: wrap;
-
     justify-content: center;
-
     gap: 10px 35px;
     
     padding: 0px;
@@ -95,9 +87,7 @@ const MoviesList = styled.ul`
 const Movie = styled.li`
     height: 193px;
     width: 129px;
-
     background-color: white;
-
     box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.1);
     border-radius: 3px;
     padding: 8px;
