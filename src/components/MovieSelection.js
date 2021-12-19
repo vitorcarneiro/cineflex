@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import styled from 'styled-components';
 
+import Loading from './Loading';
+
 export default function MovieSelection() {
 
     function GenerateMoviesList() {
@@ -12,15 +14,12 @@ export default function MovieSelection() {
             const promisse = axios.get("https://mock-api.driven.com.br/api/v4/cineflex/movies");
     
             promisse.then( response => {
-                console.log(response.data);
                 setMovies(response.data);
             });
         }, []);
     
-        if(movies === null) {
-            return <Loading />;
-        }
-    
+        if (movies === null) return (<Loading />);
+
         return (
             <MoviesList>
                 {movies.map(( {id, title, posterURL} ) => 
@@ -50,14 +49,10 @@ const Container = styled.main`
     left: 0;
     width: 100vw;
     height: auto;
-    padding-top: 10vh;
+    padding-top: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
-`;
-
-const Loading = styled.div`
-    color: yellow;
 `;
 
 const TextMovieSelection = styled.h1`
@@ -66,11 +61,14 @@ const TextMovieSelection = styled.h1`
     font-weight: normal;
     font-size: 24px;
     line-height: 28px;
+
     display: flex;
     align-items: center;
     text-align: center;
     letter-spacing: 0.04em;
     color: #293845;
+
+    margin-bottom: 20px;
 `;
 
 const MoviesList = styled.ul`
@@ -93,6 +91,7 @@ const Movie = styled.li`
     padding: 8px;
     
     img {
+        width: 100%;
         height: 100%;
     }
 `;

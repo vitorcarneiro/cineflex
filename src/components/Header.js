@@ -14,7 +14,7 @@ export default function Header() {
 
 const Title = styled.header`
     width: 100vw;
-    height: 8vh;
+    height: 67px;
 
     background-color: #C3CFD9;
 

@@ -3,15 +3,13 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import styled from 'styled-components';
 
+import Loading from './Loading';
 
 export default function DateTimeSelection() {
-    console.log('entrou1');
     
     function GenerateDateTime() {
-        console.log('entrou2');
         const [movieSession, setMovieSession] = useState(null);
         const { idMovie } = useParams();
-        console.log(idMovie);
     
         useEffect(() => {
         const promisse = axios.get(
@@ -19,16 +17,13 @@ export default function DateTimeSelection() {
         );
     
         promisse.then((response) => {
-            console.log(response.data);
             setMovieSession(response.data);
+            console.log(response.data);
         });
         }, []);
     
-        if (movieSession === null) {
-            return (
-                <Loading />
-            )
-        }
+        if (movieSession === null) return (<Loading />);
+
         return (
         <>    
             <SessionsList>
@@ -50,7 +45,16 @@ export default function DateTimeSelection() {
                 )}
             </SessionsList>
             
-            {/* <BottomBar movieName={selectedMovie.title} movieURL={selectedMovie.posterURL}/> */}
+            <BottomBar>
+                <MovieContentContainer>
+                    <MoviePoster>
+                        <img src={movieSession.posterURL} alt={movieSession.overview}/>
+                    </MoviePoster>
+                    <MovieName>
+                        {movieSession.title}
+                    </MovieName>
+                </MovieContentContainer>
+            </BottomBar>
         </>
         );
     }
@@ -76,16 +80,14 @@ const Container = styled.main`
     width: 100vw;
     height: auto;
 
-    padding-top: 10vh;
-
+    padding-top: 100px;
+    padding-bottom: 140px;
+    
     display: flex;
     flex-direction: column;
     align-items: center;
 `;
 
-const Loading = styled.div`
-    color: yellow;
-`;
 
 const TextSessionSelection = styled.h1`
     font-family: Roboto;
@@ -93,17 +95,19 @@ const TextSessionSelection = styled.h1`
     font-weight: normal;
     font-size: 24px;
     line-height: 28px;
-
+    
     display: flex;
     align-items: center;
     text-align: center;
     letter-spacing: 0.04em;
     color: #293845;
-`;
+    
+    margin-bottom: 20px;
+    `;
 
 const SessionsList = styled.ul`
     width: auto;
-
+    
     display: flex;
     flex-wrap: wrap;
     justify-content: start;
@@ -115,7 +119,7 @@ const SessionsList = styled.ul`
 
 const Session = styled.li`
     width: auto;
-`;
+    `;
 
 const SessionDate = styled.span`
     font-family: Roboto;
@@ -125,7 +129,7 @@ const SessionDate = styled.span`
     line-height: 23px;
     letter-spacing: 0.02em;
     text-align: left;
-`;
+    `;
 
 const SessionTimeOptions = styled.ul`
     margin-top: 5px;
@@ -134,21 +138,21 @@ const SessionTimeOptions = styled.ul`
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-`;
+    `;
 
 const TimeOption = styled.li`
     width: 83px;
     height: 43px;
-
+    
     background-color: #E8833A;
     border-radius: 3px;
-
+    
     list-style-type: none;
-
+    
     a {
         width: 100%;
         height: 100%;
-
+        
         font-family: Roboto;
         font-size: 18px;
         font-style: normal;
@@ -157,15 +161,71 @@ const TimeOption = styled.li`
         letter-spacing: 0.02em;
         text-align: center;
         color: white;
-
+        
         text-decoration: none;
         
         display: flex;
         align-items: center;
         justify-content: center;
-
+        
         &:hover {
             font-size: 22px;
         }
     }
+    `;
+
+const BottomBar = styled.footer`
+    width: 100vw;
+    height: 117px;
+    
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    z-index: 1;
+    
+    border-top: 1px solid #9EADBA;
+    background-color: #DFE6ED;
+    padding: 0 15px;
+    
+    display: flex;
+    align-items: center;
+    position: fixed;
+`;
+
+const MovieContentContainer = styled.div`
+    display: flex;
+    gap: 20px;
+`;
+
+const MoviePoster = styled.div`
+    width: 64px;
+    height: 89px;
+
+    background-color: white;
+
+    border-radius: 3px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 8px;
+
+    img {
+        width: 100%;
+        height: 100%;
+    }
+    `;
+
+const MovieName = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #293845;
+
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 26px;
+    line-height: 30px;
+    display: flex;
+    align-items: center;
+
+    margin-bottom: 5px;
 `;
