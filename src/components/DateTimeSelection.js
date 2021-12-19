@@ -32,15 +32,15 @@ export default function DateTimeSelection() {
                         <SessionDate>
                             {`${weekday} - ${date}`}
                         </SessionDate>
-                        <SessionTimeOptions>
+                        
+                        <SessionTimes>
                             {showtimes.map(({name: time, id}) =>
                                 <TimeOption>
                                     <Link to={`/seats/${id}`} >
                                         {time}
                                     </Link>
-                                </TimeOption>
-                            )}
-                        </SessionTimeOptions>
+                                </TimeOption> )}
+                        </SessionTimes>
                     </Session>
                 )}
             </SessionsList>
@@ -50,9 +50,9 @@ export default function DateTimeSelection() {
                     <MoviePoster>
                         <img src={movieSession.posterURL} alt={movieSession.overview}/>
                     </MoviePoster>
-                    <MovieName>
+                    <MovieTitle>
                         {movieSession.title}
-                    </MovieName>
+                    </MovieTitle>
                 </MovieContentContainer>
             </BottomBar>
         </>
@@ -103,7 +103,7 @@ const TextSessionSelection = styled.h1`
     color: #293845;
     
     margin-bottom: 20px;
-    `;
+`;
 
 const SessionsList = styled.ul`
     width: auto;
@@ -119,7 +119,7 @@ const SessionsList = styled.ul`
 
 const Session = styled.li`
     width: auto;
-    `;
+`;
 
 const SessionDate = styled.span`
     font-family: Roboto;
@@ -129,16 +129,16 @@ const SessionDate = styled.span`
     line-height: 23px;
     letter-spacing: 0.02em;
     text-align: left;
-    `;
+`;
 
-const SessionTimeOptions = styled.ul`
+const SessionTimes = styled.ul`
     margin-top: 5px;
     margin-bottom: 15px;
     
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    `;
+`;
 
 const TimeOption = styled.li`
     width: 83px;
@@ -172,7 +172,7 @@ const TimeOption = styled.li`
             font-size: 22px;
         }
     }
-    `;
+`;
 
 const BottomBar = styled.footer`
     width: 100vw;
@@ -211,9 +211,9 @@ const MoviePoster = styled.div`
         width: 100%;
         height: 100%;
     }
-    `;
+`;
 
-const MovieName = styled.div`
+const MovieTitle = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
