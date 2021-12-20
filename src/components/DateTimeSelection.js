@@ -22,7 +22,7 @@ export default function DateTimeSelection() {
         });
         }, []);
     
-        if (movieSession === null) return (<Loading />);
+        if (!movieSession) return (<Loading />);
 
         return (
         <>    

@@ -18,7 +18,7 @@ export default function MovieSelection() {
             });
         }, []);
     
-        if (movies === null) return (<Loading />);
+        if (!movies) return (<Loading />);
 
         return (
             <MoviesList>

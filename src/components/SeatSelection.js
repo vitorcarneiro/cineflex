@@ -6,45 +6,49 @@ import styled from 'styled-components';
 import Loading from './Loading';
 
 export default function SeatSelection() {
-    
-    function GenerateSeats() {
-        const [seats, setSeats] = useState(null);
-        const { idSection } = useParams();
-    
-        useEffect(() => {
-        const promisse = axios.get(
-            `https://mock-api.driven.com.br/api/v4/cineflex/showtimes/${idSection}/seats`
-        );
-    
-        promisse.then((response) => {
-            setSeats(response.data);
-            console.log(response.data);
-        });
-        }, []);
-    
-        if (seats === null) return (<Loading />);
 
-        return (
-        <>    
-            <BottomBar>
-                <MovieContentContainer>
-                    <MoviePoster>
-                        <img src={seats.movie.posterURL} alt={seats.movie.overview}/>
-                    </MoviePoster>
 
-                    <MovieInformation>
-                        <MovieTitle>
-                            {seats.movie.title}
-                        </MovieTitle>
-                        <MovieSessionInfo>
-                            {`${seats.day.weekday} - ${seats.name}`}
-                        </MovieSessionInfo> 
-                    </MovieInformation>
-                </MovieContentContainer>
-            </BottomBar>
-        </>
-        );
-    }
+
+    function seatNotAvailable() {
+        alert("This seat is not available! Please choose another one.");
+    };
+
+    function updateSelectedSeats(seatNumber, buyerData, i) {
+        console.log(seatNumber);
+        console.log(buyerData.seats[seatNumber - 1]);
+        
+
+        console.log(buyerData.seats[seatNumber - 1]);
+        console.log(i);
+        i = i + 1;
+    };
+    
+    
+
+    const [session, setSession] = useState(null);
+    const { idSession } = useParams();
+
+    let i = 0;
+
+    useEffect(() => {
+    console.log(idSession);
+    const promisse = axios.get(
+        `https://mock-api.driven.com.br/api/v4/cineflex/showtimes/${idSession}/seats`
+    );
+
+    promisse.then((response) => {
+        setSession(response.data);
+    });
+    }, [i]);
+
+    if (!session) return (<Loading />);
+
+    let buyerData = {...session};
+    console.log(buyerData);
+
+
+    /*const [buyerName, setBuyerName] = useState("teste");
+    const [buyerCPF, setBuyerCPF] = useState = ("");*/
 
     return (
         <Container>
@@ -52,10 +56,81 @@ export default function SeatSelection() {
                 Selecione o(s) assento(s)
             </TextSeatsSelection>
 
-            <GenerateSeats />
+            <SeatsPageContainer>
+                <Seats>
+                    {buyerData.seats.map(({id, name: seatNumber, isAvailable, clicked}) => 
+                        <Seat onClick={() => isAvailable ? updateSelectedSeats(seatNumber, buyerData, i) : seatNotAvailable()}
+                                className={`${isAvailable !== 'selected' ? (isAvailable === true ? ("available") : ("unavailable")) : ("selected")}`} >
+
+                                {seatNumber >= 1 && seatNumber <= 9 ? (
+                                    "0" + seatNumber
+                                ) : (
+                                    seatNumber
+                                )}
+                        </Seat>
+                    )}
+                </Seats>
+
+                <InfoCircleBox>
+                    <InfoCircleDescription>
+                        <InfoCircle className="selected" />
+                            Selecionado
+                    </InfoCircleDescription>
+
+                    <InfoCircleDescription>
+                        <InfoCircle className="available" />
+                            Disponível
+                    </InfoCircleDescription>
+
+                    <InfoCircleDescription>
+                        <InfoCircle className="unavailable" />
+                            Indisponível
+                    </InfoCircleDescription>
+                </InfoCircleBox>
+
+                <BuyerInputContainer>
+                    <BuyerInputBox>
+                        <InputInfo>
+                            Nome do comprador:
+                        </InputInfo>
+                        <input placeholder="Digite seu nome..." /* onChange={event => setBuyerName(event.target.value)} value={buyerName} */ ></input>
+                    </BuyerInputBox>
+
+                    <BuyerInputBox>
+                        <InputInfo>
+                            CPF do comprador:
+                        </InputInfo>
+                        <input placeholder="Digite seu CPF..."  /*onChange={event => setBuyerCPF(event.target.value)} value={buyerCPF}*/></input>
+                    </BuyerInputBox>
+                </BuyerInputContainer>
+
+                <ButtonConcluded>
+                    <Link to="/sucess">
+                        Reservar assento(s)    
+                    </Link>
+                </ButtonConcluded>
+            </SeatsPageContainer>
+
+            <BottomBar>
+                <MovieContentContainer>
+                    <MoviePoster>
+                        <img src={session.movie.posterURL} alt={session.movie.overview}/>
+                    </MoviePoster>
+
+                    <MovieInformation>
+                        <MovieTitle>
+                            {session.movie.title}
+                        </MovieTitle>
+                        <MovieSessionInfo>
+                            {`${session.day.weekday} - ${session.name}`}
+                        </MovieSessionInfo> 
+                    </MovieInformation>
+                </MovieContentContainer>
+            </BottomBar>
         </Container>
     );
 }
+
 
 const Container = styled.main`
     background-color: white;
@@ -75,7 +150,6 @@ const Container = styled.main`
     align-items: center;
 `;
 
-
 const TextSeatsSelection = styled.h1`
     font-family: Roboto;
     font-style: normal;
@@ -92,75 +166,6 @@ const TextSeatsSelection = styled.h1`
     margin-bottom: 20px;
     `;
 
-const SessionsList = styled.ul`
-    width: auto;
-    
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: start;
-    gap: 10px 35px;
-    
-    padding-left: 25px;
-    list-style-type: none;
-`;
-
-const Session = styled.li`
-    width: auto;
-`;
-
-const SessionDate = styled.span`
-    font-family: Roboto;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 23px;
-    letter-spacing: 0.02em;
-    text-align: left;
-`;
-
-const SessionTimes = styled.ul`
-    margin-top: 5px;
-    margin-bottom: 15px;
-    
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-`;
-
-const TimeOption = styled.li`
-    width: 83px;
-    height: 43px;
-    
-    background-color: #E8833A;
-    border-radius: 3px;
-    
-    list-style-type: none;
-    
-    a {
-        width: 100%;
-        height: 100%;
-        
-        font-family: Roboto;
-        font-size: 18px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 21px;
-        letter-spacing: 0.02em;
-        text-align: center;
-        color: white;
-        
-        text-decoration: none;
-        
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        
-        &:hover {
-            font-size: 22px;
-        }
-    }
-`;
-
 const BottomBar = styled.footer`
     width: 100vw;
     height: 117px;
@@ -176,7 +181,7 @@ const BottomBar = styled.footer`
     
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
 `;
 
 const MovieContentContainer = styled.div`
@@ -224,3 +229,168 @@ const MovieSessionInfo = styled.div`
     display: flex;
     align-items: center;
 `;
+
+const SeatsPageContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .selected {
+        background-color: #8DD7CF;
+        border: 1px solid #1AAE9E;
+    }
+    .available {
+        background-color: #C3CFD9;
+        border: 1px solid #7B8B99;
+    }
+    .unavailable {
+        background-color: #FBE192;
+        border: 1px solid #F7C52B;
+    }
+`;
+
+const Seats = styled.ul`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 360px;
+
+    padding: 0;
+    list-style-type: none;
+`;
+
+const Seat = styled.li`
+    width: 26px;
+    height: 26px;
+    
+    margin-bottom: 10px;
+    
+    border-radius: 50%;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 11px;
+    cursor: pointer;
+`;
+
+
+const InfoCircleBox = styled.div`
+    display: flex;
+    justify-content: space-evenly;
+    width: 332px;
+`;
+
+const InfoCircle = styled.div`
+    width: 25px;
+    height: 25px;
+
+    border-radius: 50%;
+`;
+
+const InfoCircleDescription = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 15px;
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.013em;
+
+    color: #4E5A65;
+`;
+
+const BuyerInputContainer = styled.div`
+    width: 327px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+    gap: 10px;
+`;
+
+const BuyerInputBox = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    input {
+        height: 51px;
+        outline: none;
+
+        border: 1px solid #D5D5D5;
+        box-sizing: border-box;
+        border-radius: 3px;
+
+        padding-left: 18px;
+    }
+
+    input::placeholder {
+        font-family: Roboto;
+        font-style: italic;
+        font-weight: normal;
+        font-size: 18px;
+        line-height: 21px;
+        display: flex;
+        align-items: center;
+
+        color: #AFAFAF;
+    }
+`;
+
+const InputInfo = styled.span`
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+    display: flex;
+    align-items: center;
+
+    color: #293845;
+`;
+
+const ButtonConcluded = styled.div`
+    width: 225px;
+    height: 42px;
+    
+    margin-top: 30px;
+    
+    display: flex;
+    align-items: center;
+    
+    background-color: #E8833A;
+    border-radius: 3px;
+    justify-content: center;
+
+    a {
+        text-decoration: none;
+
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 18px;
+        line-height: 21px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        letter-spacing: 0.04em;
+        color: #FFFFFF;
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+`;
+
+
+
+
+
+
+
