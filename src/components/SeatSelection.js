@@ -5,6 +5,11 @@ import styled from 'styled-components';
 
 import Loading from './Loading';
 
+
+
+
+
+
 export default function SeatSelection() {
 
     function seatNotAvailable() {
@@ -23,6 +28,7 @@ export default function SeatSelection() {
 
         let allowedToBook = false;
         let redirection = "";
+        let success = {};
 
         function isAllowedToBook() {
             return allowedToBook;
@@ -30,7 +36,7 @@ export default function SeatSelection() {
 
         function updateSelectedSeats(seatNumber) {
             selectedSeats = [...seatsSelected];
-            selectedSeats.push(seatNumber);
+            selectedSeats.push(parseInt(seatNumber));
             setSeatsSelected(selectedSeats);
         };
 
@@ -38,15 +44,40 @@ export default function SeatSelection() {
             if (name !== buyerName) {
                 setBuyerName(name);
             }
-
+            
             if (cpf !== buyerCPF) {
                 setBuyerCPF(cpf);
             }
-
-            if (seatsSelected.length >= 1 && buyerName.length >= 2 && buyerCPF.length === 11) {
+            
+            if (userSeats.length >= 1 && buyerName.length >= 2 && buyerCPF.length === 11) {
+                success =
+                {
+                ids: seatsSelected,
+                name: buyerName,
+                cpf: buyerCPF
+                }
+                
                 redirection = "/success";
                 allowedToBook = true;
-            }   
+
+            }  else {
+                redirection = "";
+                allowedToBook = false;
+            }
+        }
+
+        function MovieBooked(successData) {
+            console.log(successData);
+        
+            return (
+                <Container>
+                    <TextSeatsSelection>
+                        Selecione o(s) assento(s)
+                    </TextSeatsSelection>
+        
+                    
+                </Container>
+            );
         }
 
         useEffect(() => {
@@ -61,13 +92,15 @@ export default function SeatSelection() {
 
         if (!session) return (<Loading />);
 
+        validateMovieBooking(seatsSelected, buyerName, buyerCPF);
+
         return (
         <> 
             <SeatsPageContainer>
                 <Seats>
-                    {session.seats.map(({id, name: seatNumber, isAvailable, clicked}, i) => 
+                    {session.seats.map(({name: seatNumber, isAvailable}) => 
                         <Seat onClick={() => isAvailable ? updateSelectedSeats(seatNumber) : seatNotAvailable()}
-                                className={`${ seatsSelected.includes(seatNumber) ? "selected" : (isAvailable === true ? ("available") : ("unavailable"))}`} >
+                                className={`${ seatsSelected.includes(parseInt(seatNumber)) ? "selected" : (isAvailable === true ? ("available") : ("unavailable"))}`} >
                             
                             {seatNumber >= 1 && seatNumber <= 9 ? (
                                 "0" + seatNumber
@@ -113,9 +146,9 @@ export default function SeatSelection() {
                 </BuyerInputContainer>
 
                 <ButtonConcluded>
-                    <Link onClick={event => isAllowedToBook() ? alert('ok') : alert('verify')} to={redirection}>
+                    <button onClick={event => isAllowedToBook() ? setSession(MovieBooked(success)) : alert('Something is wrong')}>
                         Reservar assento(s)    
-                    </Link>
+                    </button>
                 </ButtonConcluded>
             </SeatsPageContainer>
 
@@ -138,6 +171,8 @@ export default function SeatSelection() {
         </>
         );
     }
+
+
 
     return (
         <Container>
@@ -386,8 +421,14 @@ const ButtonConcluded = styled.div`
     border-radius: 3px;
     justify-content: center;
 
-    a {
-        text-decoration: none;
+    button {
+        background: none;
+        color: inherit;
+        border: none;
+        padding: 0;
+        font: inherit;
+        cursor: pointer;
+        outline: inherit;        
 
         font-family: Roboto;
         font-style: normal;
