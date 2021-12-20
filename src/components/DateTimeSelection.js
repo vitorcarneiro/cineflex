@@ -18,7 +18,6 @@ export default function DateTimeSelection() {
     
         promisse.then((response) => {
             setMovieSession(response.data);
-            console.log(response.data);
         });
         }, []);
     

@@ -7,66 +7,74 @@ import Loading from './Loading';
 
 export default function SeatSelection() {
 
-
-
     function seatNotAvailable() {
         alert("This seat is not available! Please choose another one.");
     };
 
-    function updateSelectedSeats(seatNumber, buyerData, i) {
-        console.log(seatNumber);
-        console.log(buyerData.seats[seatNumber - 1]);
-        
+    function GenerateSeats() {
+        const [session, setSession] = useState(null);
+        const { idSession } = useParams();
 
-        console.log(buyerData.seats[seatNumber - 1]);
-        console.log(i);
-        i = i + 1;
-    };
+        const [seatsSelected, setSeatsSelected] = useState([]);
+        let selectedSeats = [];
+
+        const [buyerName, setBuyerName] = useState("");
+        const [buyerCPF, setBuyerCPF] = useState("");
+
+        let allowedToBook = false;
+        let redirection = "";
+
+        function isAllowedToBook() {
+            return allowedToBook;
+        }
+
+        function updateSelectedSeats(seatNumber) {
+            selectedSeats = [...seatsSelected];
+            selectedSeats.push(seatNumber);
+            setSeatsSelected(selectedSeats);
+        };
+
+        function validateMovieBooking(userSeats, name, cpf) {
+            if (name !== buyerName) {
+                setBuyerName(name);
+            }
+
+            if (cpf !== buyerCPF) {
+                setBuyerCPF(cpf);
+            }
+
+            if (seatsSelected.length >= 1 && buyerName.length >= 2 && buyerCPF.length === 11) {
+                redirection = "/success";
+                allowedToBook = true;
+            }   
+        }
+
+        useEffect(() => {
+        const promisse = axios.get(
+            `https://mock-api.driven.com.br/api/v4/cineflex/showtimes/${idSession}/seats`
+        );
     
-    
+        promisse.then((response) => {
+            setSession(response.data);
+        });
+        }, [seatsSelected]);
 
-    const [session, setSession] = useState(null);
-    const { idSession } = useParams();
+        if (!session) return (<Loading />);
 
-    let i = 0;
-
-    useEffect(() => {
-    console.log(idSession);
-    const promisse = axios.get(
-        `https://mock-api.driven.com.br/api/v4/cineflex/showtimes/${idSession}/seats`
-    );
-
-    promisse.then((response) => {
-        setSession(response.data);
-    });
-    }, [i]);
-
-    if (!session) return (<Loading />);
-
-    let buyerData = {...session};
-    console.log(buyerData);
-
-
-    /*const [buyerName, setBuyerName] = useState("teste");
-    const [buyerCPF, setBuyerCPF] = useState = ("");*/
-
-    return (
-        <Container>
-            <TextSeatsSelection>
-                Selecione o(s) assento(s)
-            </TextSeatsSelection>
-
+        return (
+        <> 
             <SeatsPageContainer>
                 <Seats>
-                    {buyerData.seats.map(({id, name: seatNumber, isAvailable, clicked}) => 
-                        <Seat onClick={() => isAvailable ? updateSelectedSeats(seatNumber, buyerData, i) : seatNotAvailable()}
-                                className={`${isAvailable !== 'selected' ? (isAvailable === true ? ("available") : ("unavailable")) : ("selected")}`} >
+                    {session.seats.map(({id, name: seatNumber, isAvailable, clicked}, i) => 
+                        <Seat onClick={() => isAvailable ? updateSelectedSeats(seatNumber) : seatNotAvailable()}
+                                className={`${ seatsSelected.includes(seatNumber) ? "selected" : (isAvailable === true ? ("available") : ("unavailable"))}`} >
+                            
+                            {seatNumber >= 1 && seatNumber <= 9 ? (
+                                "0" + seatNumber
+                            ) : (
+                                seatNumber
+                            )}
 
-                                {seatNumber >= 1 && seatNumber <= 9 ? (
-                                    "0" + seatNumber
-                                ) : (
-                                    seatNumber
-                                )}
                         </Seat>
                     )}
                 </Seats>
@@ -93,19 +101,19 @@ export default function SeatSelection() {
                         <InputInfo>
                             Nome do comprador:
                         </InputInfo>
-                        <input placeholder="Digite seu nome..." /* onChange={event => setBuyerName(event.target.value)} value={buyerName} */ ></input>
+                        <input placeholder="Digite seu nome..."  onChange={event => validateMovieBooking(seatsSelected, event.target.value, buyerCPF)} value={buyerName} ></input>
                     </BuyerInputBox>
 
                     <BuyerInputBox>
                         <InputInfo>
                             CPF do comprador:
                         </InputInfo>
-                        <input placeholder="Digite seu CPF..."  /*onChange={event => setBuyerCPF(event.target.value)} value={buyerCPF}*/></input>
+                        <input placeholder="Digite seu CPF..."  onChange={event => validateMovieBooking(seatsSelected, buyerName, event.target.value) }  value={buyerCPF}></input>
                     </BuyerInputBox>
                 </BuyerInputContainer>
 
                 <ButtonConcluded>
-                    <Link to="/sucess">
+                    <Link onClick={event => isAllowedToBook() ? alert('ok') : alert('verify')} to={redirection}>
                         Reservar assento(s)    
                     </Link>
                 </ButtonConcluded>
@@ -127,10 +135,20 @@ export default function SeatSelection() {
                     </MovieInformation>
                 </MovieContentContainer>
             </BottomBar>
+        </>
+        );
+    }
+
+    return (
+        <Container>
+            <TextSeatsSelection>
+                Selecione o(s) assento(s)
+            </TextSeatsSelection>
+
+            <GenerateSeats />
         </Container>
     );
 }
-
 
 const Container = styled.main`
     background-color: white;
