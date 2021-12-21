@@ -18,9 +18,13 @@ export default function Success({buyerMovieData}) {
     promisse.then(() => {
         setSuccessPage(buyerMovieData);
     });
-    }, []);
+    }, [buyerMovieData]);
 
-    if (!successPage) return (<Loading />);
+    if (!successPage) return (
+        <Container>
+            <Loading />
+        </Container>
+    );
 
     console.log(buyerMovieData);
 

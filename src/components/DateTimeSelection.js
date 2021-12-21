@@ -19,7 +19,7 @@ export default function DateTimeSelection() {
         promisse.then((response) => {
             setMovieSession(response.data);
         });
-        }, []);
+        }, [idMovie]);
     
         if (!movieSession) return (<Loading />);
 

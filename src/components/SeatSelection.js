@@ -75,7 +75,7 @@ export default function SeatSelection({buyerMovieInfo}) {
         promisse.then((response) => {
             setSession(response.data);
         });
-        }, [seatsSelected]);
+        }, [seatsSelected, idSession]);
 
         if (!session) return (<Loading />);
 
