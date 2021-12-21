@@ -5,12 +5,7 @@ import styled from 'styled-components';
 
 import Loading from './Loading';
 
-
-
-
-
-
-export default function SeatSelection() {
+export default function SeatSelection({buyerMovieInfo}) {
 
     function seatNotAvailable() {
         alert("This seat is not available! Please choose another one.");
@@ -29,6 +24,10 @@ export default function SeatSelection() {
         let allowedToBook = false;
         let redirection = "";
         let success = {};
+
+        function exportData() {
+            buyerMovieInfo(success);
+        }
 
         function isAllowedToBook() {
             return allowedToBook;
@@ -52,11 +51,13 @@ export default function SeatSelection() {
             if (userSeats.length >= 1 && buyerName.length >= 2 && buyerCPF.length === 11) {
                 success =
                 {
-                ids: seatsSelected,
-                name: buyerName,
-                cpf: buyerCPF
+                    buyerSeatsAndData: { ids: seatsSelected, name: buyerName, cpf: buyerCPF},
+                    movieTitle: session.movie.title,
+                    date: session.day.date,
+                    weekday: session.day.weekday,
+                    time: session.name
                 }
-                
+
                 redirection = "/success";
                 allowedToBook = true;
 
@@ -64,20 +65,6 @@ export default function SeatSelection() {
                 redirection = "";
                 allowedToBook = false;
             }
-        }
-
-        function MovieBooked(successData) {
-            console.log(successData);
-        
-            return (
-                <Container>
-                    <TextSeatsSelection>
-                        Selecione o(s) assento(s)
-                    </TextSeatsSelection>
-        
-                    
-                </Container>
-            );
         }
 
         useEffect(() => {
@@ -146,9 +133,9 @@ export default function SeatSelection() {
                 </BuyerInputContainer>
 
                 <ButtonConcluded>
-                    <button onClick={event => isAllowedToBook() ? setSession(MovieBooked(success)) : alert('Something is wrong')}>
+                    <Link onClick={event => isAllowedToBook() ? exportData() : alert('Something is wrong')} to={redirection}>
                         Reservar assento(s)    
-                    </button>
+                    </Link>
                 </ButtonConcluded>
             </SeatsPageContainer>
 
@@ -421,14 +408,8 @@ const ButtonConcluded = styled.div`
     border-radius: 3px;
     justify-content: center;
 
-    button {
-        background: none;
-        color: inherit;
-        border: none;
-        padding: 0;
-        font: inherit;
-        cursor: pointer;
-        outline: inherit;        
+    a {
+        text-decoration: none;
 
         font-family: Roboto;
         font-style: normal;
