@@ -71,8 +71,6 @@ export default function Success({buyerMovieData}) {
                         Voltar para Home
                     </Link>
             </ButtonHome>
-
-
         </Container>
 
     );
