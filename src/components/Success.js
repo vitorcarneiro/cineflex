@@ -7,9 +7,6 @@ import Loading from './Loading';
 
 export default function Success({buyerMovieData}) {
 
-    console.log(buyerMovieData);
-
-
     const [successPage, setSuccessPage] = useState(null);
 
     useEffect(() => {
@@ -25,8 +22,6 @@ export default function Success({buyerMovieData}) {
             <Loading />
         </Container>
     );
-
-    console.log(buyerMovieData);
 
     return (
         <Container>
