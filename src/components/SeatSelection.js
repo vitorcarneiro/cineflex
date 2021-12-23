@@ -15,8 +15,11 @@ export default function SeatSelection({buyerMovieInfo}) {
         const [session, setSession] = useState(null);
         const { idSession } = useParams();
 
-        const [seatsSelected, setSeatsSelected] = useState([]);
-        let selectedSeats = [];
+        const [seatsIdsSelected, setSeatsIdsSelected] = useState([]);
+        let selectedIdsSeats = [];
+        
+        const [seatsName, setSeatsName] = useState([]);
+        let selectedNamesSeats = [];
 
         const [buyerName, setBuyerName] = useState("");
         const [buyerCPF, setBuyerCPF] = useState("");
@@ -33,10 +36,31 @@ export default function SeatSelection({buyerMovieInfo}) {
             return allowedToBook;
         }
 
-        function updateSelectedSeats(seatNumber) {
-            selectedSeats = [...seatsSelected];
-            selectedSeats.push(parseInt(seatNumber));
-            setSeatsSelected(selectedSeats);
+        function updateSelectedSeats(seatId, seatNumber) {
+            seatNumber = parseInt(seatNumber);
+
+            if (seatsName.includes(seatNumber)) {
+                const seatIndex = seatsName.indexOf(seatNumber);
+
+                seatsName.splice(seatIndex, 1);
+                seatsIdsSelected.splice(seatIndex, 1);
+
+                selectedNamesSeats = [...seatsName];
+                selectedIdsSeats = [...seatsIdsSelected];
+
+                setSeatsName(selectedNamesSeats);
+                setSeatsIdsSelected(selectedIdsSeats);
+    
+                return;
+            }
+
+            selectedIdsSeats = [...seatsIdsSelected];
+            selectedIdsSeats.push(seatId);
+            setSeatsIdsSelected(selectedIdsSeats);
+
+            selectedNamesSeats = [...seatsName];
+            selectedNamesSeats.push(seatNumber);
+            setSeatsName(selectedNamesSeats);
         };
 
         function validateMovieBooking(userSeats, name, cpf) {
@@ -51,7 +75,8 @@ export default function SeatSelection({buyerMovieInfo}) {
             if (userSeats.length >= 1 && buyerName.length >= 2 && buyerCPF.length === 11) {
                 success =
                 {
-                    buyerSeatsAndData: { ids: seatsSelected, name: buyerName, cpf: buyerCPF},
+                    buyerSeatsAndData: { ids: seatsIdsSelected, name: buyerName, cpf: buyerCPF},
+                    seatsName: seatsName,
                     movieTitle: session.movie.title,
                     date: session.day.date,
                     weekday: session.day.weekday,
@@ -75,19 +100,19 @@ export default function SeatSelection({buyerMovieInfo}) {
         promisse.then((response) => {
             setSession(response.data);
         });
-        }, [seatsSelected, idSession]);
+        }, [seatsIdsSelected, idSession]);
 
         if (!session) return (<Loading />);
 
-        validateMovieBooking(seatsSelected, buyerName, buyerCPF);
+        validateMovieBooking(seatsIdsSelected, buyerName, buyerCPF);
 
         return (
         <> 
             <SeatsPageContainer>
                 <Seats>
-                    {session.seats.map(({name: seatNumber, isAvailable}) => 
-                        <Seat onClick={() => isAvailable ? updateSelectedSeats(seatNumber) : seatNotAvailable()}
-                                className={`${ seatsSelected.includes(parseInt(seatNumber)) ? "selected" : (isAvailable === true ? ("available") : ("unavailable"))}`} >
+                    {session.seats.map(({name: seatNumber, isAvailable, id: seatId}) => 
+                        <Seat onClick={() => isAvailable ? updateSelectedSeats(seatId, seatNumber) : seatNotAvailable()}
+                                className={`${ seatsIdsSelected.includes(seatId) ? "selected" : (isAvailable === true ? ("available") : ("unavailable"))}`} >
                             
                             {seatNumber >= 1 && seatNumber <= 9 ? (
                                 "0" + seatNumber
@@ -121,14 +146,14 @@ export default function SeatSelection({buyerMovieInfo}) {
                         <InputInfo>
                             Nome do comprador:
                         </InputInfo>
-                        <input placeholder="Digite seu nome..."  onChange={event => validateMovieBooking(seatsSelected, event.target.value, buyerCPF)} value={buyerName} ></input>
+                        <input placeholder="Digite seu nome..."  onChange={event => validateMovieBooking(seatsIdsSelected, event.target.value, buyerCPF)} value={buyerName} ></input>
                     </BuyerInputBox>
 
                     <BuyerInputBox>
                         <InputInfo>
                             CPF do comprador:
                         </InputInfo>
-                        <input placeholder="Digite seu CPF..."  onChange={event => validateMovieBooking(seatsSelected, buyerName, event.target.value) }  value={buyerCPF}></input>
+                        <input placeholder="Digite seu CPF..."  onChange={event => validateMovieBooking(seatsIdsSelected, buyerName, event.target.value) }  value={buyerCPF}></input>
                     </BuyerInputBox>
                 </BuyerInputContainer>
 
@@ -158,8 +183,6 @@ export default function SeatSelection({buyerMovieInfo}) {
         </>
         );
     }
-
-
 
     return (
         <Container>

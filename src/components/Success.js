@@ -12,7 +12,7 @@ export default function Success({buyerMovieData}) {
     useEffect(() => {
     const promisse = axios.post(`https://mock-api.driven.com.br/api/v4/cineflex/seats/book-many`, buyerMovieData.buyerSeatsAndData);
 
-    promisse.then(() => {
+    promisse.then((response) => {
         setSuccessPage(buyerMovieData);
     });
     }, [buyerMovieData]);
@@ -46,9 +46,9 @@ export default function Success({buyerMovieData}) {
                 </InfoTitle>
 
                 <DataSeats>
-                    {buyerMovieData.buyerSeatsAndData.ids.map((seat) =>
+                    {buyerMovieData.seatsName.map((seatName) =>
                         <span>
-                            Assento {seat} <br />
+                            Assento {seatName} <br />
                         </span>
                     )}
                 </DataSeats>
