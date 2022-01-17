@@ -1,70 +1,64 @@
-# Getting Started with Create React App
+# Cineflex
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Let`s book a seat in move theater using [Cineflex](https://cineflex-vitor-carneiro.vercel.app/).
 
-## Available Scripts
+<p align="center">
+  <img src="./src/assets/cineflex-usage.gif" alt="cineflex-usage.gif" height="540" />
+</p>
 
-In the project directory, you can run:
+## About
 
-### `npm start`
+With Cineflex you can now book a session in the nearest movie theater in an easy way.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Implemented features
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- Choose movie
+- Choose session
+- Choose seats
+- Choose seats
+- Book session
 
-### `npm test`
+## How to run
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Clone this repository
+2. Install dependencies
+```bash
+npm i
+```
+3. Run this with
+```bash
+npm start
+```
+4. You can optionally build the project running
+```bash
+npm run build
+```
+5. Finally access http://localhost:3000 on your favorite browser (unless it is Internet Explorer. In this case, review your life decisions)
+## Technologies
+The following tools and frameworks were used in the construction of the project:<br>
 
-### `npm run build`
+[![wakatime](https://wakatime.com/badge/user/75b063fd-fc90-4981-92ec-8042466ed674/project/12a5f40b-a0d8-4ed7-b874-d39569e36f74.svg)](https://wakatime.com/@vitorcarneiro/projects/hfaysdzwib?start=2022-01-11&end=2022-01-17)
+<p>
+  <img style='margin: 5px;' src="https://img.shields.io/badge/react-app%20-%2320232a.svg?&style=flat&color=60ddf9&logo=react&logoColor=%2361DAFB"/>
+  <img style='margin: 5px;' src='https://img.shields.io/badge/axios%20-%2320232a.svg?&style=flat&color=informational'>
+  <img style='margin: 5px;' src='https://img.shields.io/badge/styled-components%20-%2320232a.svg?&style=flat&color=b8679e&logo=styled-components&logoColor=%3a3a3a'>
+  <img style='margin: 5px;' src='https://img.shields.io/badge/axios%20-%2320232a.svg?&style=flat&color=informational'>
+  <img style='margin: 5px;' src="https://img.shields.io/badge/react_router%20-%2320232a.svg?&style=flat&logo=react&logoColor=%2361DAFB"/>
+</p>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## How to run
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Clone this repository
+2. Install dependencies
+```bash
+npm i
+```
+4. Run the front-end with
+```bash
+npm start
+```
+5. You can optionally build the project running
+```bash
+npm run build
+```
+6. Finally access http://localhost:3000 on your favorite browser (unless it is Internet Explorer. In this case, review your life decisions)
